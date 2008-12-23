@@ -1,0 +1,16 @@
+# By default the unit tests will run against the latest version of Rails.
+# You can run it against a specific version by setting:
+#
+#   rails:
+#     version: <rails version number here>
+#
+# or
+#
+#   rails:
+#     vendor: /path-to-rails-sources
+
+mysql:
+  adapter: mysql
+  database: test
+  host: localhost
+  username: root
