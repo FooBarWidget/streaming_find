@@ -1,4 +1,4 @@
-ActiveRecord::Base.metaclass.class_eval do
+ActiveRecord::Base.singleton_class.class_eval do
   def find(*args, &block)
     options = args.extract_options!
     validate_find_options(options)
