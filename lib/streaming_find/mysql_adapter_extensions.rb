@@ -1,15 +1,15 @@
 ActiveRecord::ConnectionAdapters::MysqlAdapter.class_eval do
   target = defined?(Mysql::Result) ? Mysql::Result : MysqlRes
   
-  # Ruby driver has a version string and returns null values in each_hash
-  # C driver >= 2.7 returns null values in each_hash
+  # Ruby driver has a version string and returns null values in each_hash.
+  # C driver >= 2.7 also returns null values in each_hash.
   if Mysql.const_defined?(:VERSION) && (Mysql::VERSION.is_a?(String) || Mysql::VERSION >= 20700)
     target.class_eval do
       alias_method :each_hash_with_nulls, :each_hash
     end
     
-  # adapters before 2.7 don't have a version constant
-  # and don't return null values in each_hash
+  # C drivers < 2.7 don't have a version constant
+  # and don't return null values in each_hash.
   else
     target.class_eval do
       def each_hash_with_nulls
