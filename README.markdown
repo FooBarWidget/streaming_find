@@ -45,6 +45,6 @@ streaming\_find vs find\_in\_batches
 Supported adapters
 ------------------
 
-Only MySQL is supported at this time. Please contribute to have more adapters supported.
+Only MySQL and SQLite are supported at this time. Please contribute to have more adapters supported.
 
 Note however that even though `streaming_find` does its best to load results one-by-one, the Ruby MySQL driver still loads the entire result set into memory. However this amount of memory is fairly small compared to what ActiveRecord would otherwise use, so it's still a win. We've tested this in production with queries that return tens of thousands of rows, and the system could handle it fine.
