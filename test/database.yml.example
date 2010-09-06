@@ -30,3 +30,8 @@ mysql:
 sqlite3:
   adapter: sqlite3
   database: test/database.sqlite3
+
+dummy:
+  adapter: sqlite3
+  database: test/database.sqlite3
+  dummy: true

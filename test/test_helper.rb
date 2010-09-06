@@ -31,6 +31,9 @@ ActiveRecord::Base.logger = logger
 ActiveRecord::Base.establish_connection(config[config_name])
 ActiveRecord::Base.connection  # force loading database driver
 
+if config[config_name]['dummy']
+  ENV['STREAMING_FIND_USE_DUMMY_ADAPTER_EXTENSION'] = "1"
+end
 require 'streaming_find'
 
 
