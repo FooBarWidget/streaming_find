@@ -5,25 +5,28 @@ $LOAD_PATH.unshift("#{ROOT}/lib")
 
 require 'rubygems'
 require 'yaml'
+require 'logger'
 require 'test/unit'
 
-config  = YAML.load_file("#{ROOT}/test/database.yml")
-if config['rails']['version']
-  gem 'rails', "=#{config['rails']['version']}"
-elsif config['rails']['vendor']
-  vendor_path = config['rails']['vendor']
-  $LOAD_PATH.unshift("#{vendor_path}/activesupport/lib")
-  $LOAD_PATH.unshift("#{vendor_path}/activerecord/lib")
+config = YAML.load_file("#{ROOT}/test/database.yml")
+if config['rails']
+  if config['rails']['version']
+    gem 'rails', "=#{config['rails']['version']}"
+  elsif config['rails']['vendor']
+    vendor_path = config['rails']['vendor']
+    $LOAD_PATH.unshift("#{vendor_path}/activesupport/lib")
+    $LOAD_PATH.unshift("#{vendor_path}/activerecord/lib")
+  end
 end
 require 'active_record'
 require 'active_record/test_case'
 
 
-adapter = ENV['ADAPTER'] || "mysql"
+config_name = ENV['CONFIG'] || "mysql"
 logger = Logger.new(STDERR)
 logger.level = Logger::INFO
 ActiveRecord::Base.logger = logger
-ActiveRecord::Base.establish_connection(config[adapter])
+ActiveRecord::Base.establish_connection(config[config_name])
 ActiveRecord::Base.connection  # force loading database driver
 
 require 'streaming_find'

@@ -8,9 +8,25 @@
 #
 #   rails:
 #     vendor: /path-to-rails-sources
+rails:
+  version: 2.3.8
+
+# Below follows a list of configurations for different database adapters
+# in the form of:
+#
+# <name>:
+#   <some database configuration here>
+#
+# You can run the unit test against a specific configuration by running
+#
+#   rake test CONFIG=<config name here>
 
 mysql:
   adapter: mysql
   database: test
   host: localhost
   username: root
+
+sqlite3:
+  adapter: sqlite3
+  database: test/test.sqlite3
