@@ -23,6 +23,8 @@ require 'active_record/test_case'
 
 
 config_name = ENV['CONFIG'] || "mysql"
+abort "No configuration named '#{config_name}' in test/database.yml" if !config[config_name]
+
 logger = Logger.new(STDERR)
 logger.level = Logger::INFO
 ActiveRecord::Base.logger = logger
@@ -64,29 +66,31 @@ class Book < ActiveRecord::Base
 end
 
 def repopulate_tables
-  Number.delete_all
-  TOTAL_NUMBERS.times do |i|
-    Number.create!(:value => i)
+  ActiveRecord::Base.transaction do
+    Number.delete_all
+    TOTAL_NUMBERS.times do |i|
+      Number.create!(:value => i)
+    end
+    zero = Number.find_by_value(0)
+    one = Number.find_by_value(1)
+    
+    Author.delete_all
+    
+    ken = zero.authors.create!(:name => 'Ken Akamatsu')
+    ken.books.create!(:name => 'Love Hina', :tag => 0)
+    ken.books.create!(:name => 'Negima', :tag => 1)
+    
+    masashi = one.authors.create!(:name => 'Masashi Kishimoto')
+    masashi.books.create!(:name => 'Naruto', :tag => 0)
+    
+    rumiko = one.authors.create!(:name => 'Rumiko Takahashi')
+    rumiko.books.create!(:name => 'Inu Yasha', :tag => 0)
+    rumiko.books.create!(:name => 'Ranma 1/2', :tag => 0)
+    rumiko.books.create!(:name => 'Urusei Yatsura', :tag => 1)
+    
+    tsugumi = one.authors.create!(:name => 'Tsugumi Ohba')
+    tsugumi.books.create(:name => 'Death Note', :tag => 2)
   end
-  zero = Number.find_by_value(0)
-  one = Number.find_by_value(1)
-  
-  Author.delete_all
-  
-  ken = zero.authors.create!(:name => 'Ken Akamatsu')
-  ken.books.create!(:name => 'Love Hina', :tag => 0)
-  ken.books.create!(:name => 'Negima', :tag => 1)
-  
-  masashi = one.authors.create!(:name => 'Masashi Kishimoto')
-  masashi.books.create!(:name => 'Naruto', :tag => 0)
-  
-  rumiko = one.authors.create!(:name => 'Rumiko Takahashi')
-  rumiko.books.create!(:name => 'Inu Yasha', :tag => 0)
-  rumiko.books.create!(:name => 'Ranma 1/2', :tag => 0)
-  rumiko.books.create!(:name => 'Urusei Yatsura', :tag => 1)
-  
-  tsugumi = one.authors.create!(:name => 'Tsugumi Ohba')
-  tsugumi.books.create(:name => 'Death Note', :tag => 2)
 end
 
 def debug_queries

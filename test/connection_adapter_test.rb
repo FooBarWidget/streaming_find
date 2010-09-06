@@ -9,7 +9,7 @@ class ConnectionAdapterTest < ActiveSupport::TestCase
   def test_select_all_with_block
     found_numbers = []
     @connection.select_all("SELECT * FROM numbers") do |row|
-      found_numbers << row["value"]
+      found_numbers << row["value"].to_s
     end
     assert_equal TOTAL_NUMBERS, found_numbers.size
     TOTAL_NUMBERS.times do |number|
@@ -20,7 +20,7 @@ class ConnectionAdapterTest < ActiveSupport::TestCase
   def test_select_all_without_block
     found_numbers = []
     @connection.select_all("SELECT * FROM numbers").each do |row|
-      found_numbers << row["value"]
+      found_numbers << row["value"].to_s
     end
     assert_equal TOTAL_NUMBERS, found_numbers.size
     TOTAL_NUMBERS.times do |number|
