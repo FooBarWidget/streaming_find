@@ -24,6 +24,7 @@ require 'active_record/test_case'
 
 config_name = ENV['CONFIG'] || "mysql"
 abort "No configuration named '#{config_name}' in test/database.yml" if !config[config_name]
+puts "Testing with the '#{config_name}' configuration"
 
 logger = Logger.new(STDERR)
 logger.level = Logger::INFO
